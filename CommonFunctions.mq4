@@ -15,6 +15,7 @@
 input double Risk; //Risk per trade in %.
 input double InitStopLoss; //Stop Loss in pips on m1 chart.
 //input double StopFactor; //Stop Loss multiplier.
+input double ProfitFactor; //TP multipler in relation to SL.
 
 //+------------------------------------------------------------------+
 //| Calculate the lot size                                   |
@@ -31,7 +32,7 @@ double calculateLotSize (double risk, double stopLoss) {
 }
 
 //+------------------------------------------------------------------+
-//| Set Stop Loss                                  |
+//| Set Stop Loss in pips                                            |
 //+------------------------------------------------------------------+
 double setSL(double initStopLoss, int timeFrame) {
    double stopLoss =0;
@@ -58,6 +59,14 @@ double setSL(double initStopLoss, int timeFrame) {
    }
    
    return stopLoss;
+}
+
+//+------------------------------------------------------------------+
+//| Set Take Profit in pips                                          |
+//+------------------------------------------------------------------+
+double setTP (double profitFactor) {
+   double stopLoss = setSL(InitStopLoss, Period());
+   return stopLoss * profitFactor;
 }
 
 //+------------------------------------------------------------------+
