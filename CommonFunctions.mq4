@@ -9,7 +9,16 @@
 #property strict
 #property show_inputs
 
+//+------------------------------------------------------------------+
+//| Inputs to be specified by the user                                   |
+//+------------------------------------------------------------------+
 input double Risk; //Risk per trade in %.
+input double InitStopLoss; //Stop Loss in pips on m1 chart.
+//input double StopFactor; //Stop Loss multiplier.
+
+//+------------------------------------------------------------------+
+//| Calculate the lot size                                   |
+//+------------------------------------------------------------------+
 
 double calculateLotSize (double risk, double stopLoss) {
    double tradeAmount = AccountFreeMargin() * risk / 100;
@@ -19,6 +28,36 @@ double calculateLotSize (double risk, double stopLoss) {
       return 0;
    else
       return lotSize;
+}
+
+//+------------------------------------------------------------------+
+//| Set Stop Loss                                  |
+//+------------------------------------------------------------------+
+double setSL(double initStopLoss, int timeFrame) {
+   double stopLoss =0;
+   
+   switch(timeFrame) {
+      case 1:
+         stopLoss = initStopLoss;
+         break;
+      case 5:
+         stopLoss = MathPow(initStopLoss,2);
+         break;
+      case 15:
+         stopLoss = MathPow(initStopLoss,3);
+         break;
+      case 60:
+         stopLoss = MathPow(initStopLoss,4);
+         break;
+      case 240:
+         stopLoss = MathPow(initStopLoss,5);
+         break;
+      case 1440:
+         stopLoss = MathPow(initStopLoss,6);
+         break;
+   }
+   
+   return stopLoss;
 }
 
 //+------------------------------------------------------------------+
